@@ -11,9 +11,9 @@ namespace API.Controllers
     public class ProductsController(IProductRepository repo) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(string? brand, string? type, string? sort)
         {
-            return Ok(await repo.GetProductsAsync());
+            return Ok(await repo.GetProductsAsync(brand, type, sort));
         }
 
         [HttpGet("{id:int}")]
@@ -69,7 +69,19 @@ namespace API.Controllers
                 return NoContent();
             }
 
-            return BadRequest("Problem deketing the product");
+            return BadRequest("Problem deleting the product");
+        }
+
+        [HttpGet("brands")]
+        public async Task<ActionResult<IReadOnlyList<string>>> GetBrands(int id)
+        {
+            return Ok(await repo.GetBrandsAsync());
+        }
+
+        [HttpGet("types")]
+        public async Task<ActionResult<IReadOnlyList<string>>> GetTypes(int id)
+        {
+            return Ok(await repo.GetTypesAsync());
         }
 
         // private bool ProductExist(int id)
